@@ -1,0 +1,82 @@
+@font-face {
+	font-family: "Clinton";
+	src: url("./fonts/ClintonBold.ttf");
+}
+
+@font-face {
+	font-family: "Clinton-Semi";
+	src: url("./fonts/Clinton\ semibold.ttf");
+}
+
+@font-face {
+	font-family: "Myste-Regular";
+	src: url("./fonts/Myste-Regular.otf");
+}
+
+body {
+	margin: 0;
+	font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+		Helvetica Neue, sans-serif;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #333;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 0.5em 0;
+	font-family: "Clinton";
+	font-weight: 400;
+	line-height: 1.2;
+}
+
+nav {
+	font-family: "Clinton-Semi";
+}
+
+h1 {
+	font-size: 2em;
+}
+
+a {
+	color: inherit;
+}
+
+a:hover {
+	transform: scale(1.3) rotate(-3deg);
+	transition: ease 200ms;
+}
+
+p > a {
+	font-weight: bold;
+	text-decoration-color: #fcee21;
+	text-decoration-style: wavy;
+}
+
+p > a:hover {
+	text-decoration-style: double;
+}
+
+p,
+button {
+	font-family: "Myste-Regular";
+}
+
+code {
+	font-family: menlo, inconsolata, monospace;
+	font-size: calc(1em - 2px);
+	color: #555;
+	background-color: #f0f0f0;
+	padding: 0.2em 0.4em;
+	border-radius: 2px;
+}
+
+@media (min-width: 400px) {
+	body {
+		font-size: 16px;
+	}
+}
