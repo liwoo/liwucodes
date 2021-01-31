@@ -1,6 +1,7 @@
 <script lang="typescript">
   import { onMount, beforeUpdate } from "svelte";
   import { range } from "lodash";
+  import { fade } from "svelte/transition";
 
   export let innerWidth;
   export let innerHeight = 600;
@@ -77,14 +78,13 @@
   beforeUpdate(renderStars);
 </script>
 
+<div in:fade>
+  <canvas />
+</div>
+
 <style>
   div {
     position: absolute;
     z-index: -10;
   }
 </style>
-
-
-<div>
-  <canvas />
-</div>
