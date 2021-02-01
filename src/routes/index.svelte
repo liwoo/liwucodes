@@ -7,7 +7,7 @@
   import MeAndPole from "../components/index/PoleAndMe.svelte";
   import Container from "../components/Container.svelte";
   import LargeButton from "../components/LargeButton.svelte";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { derived } from "svelte/store";
   import { lightMode } from "../store.js";
   import { fade } from "svelte/transition";
@@ -47,6 +47,7 @@
 
   let frame;
   let poleLightOn = false;
+
   onMount(() => {
     setTimeout(() => {
       streetTransitionStart = true;
@@ -172,18 +173,10 @@
         in:fade={{ delay: 800 }}
         class="tw-flex tw-mt-2 tw-flex-col lg:tw-flex-row"
       >
-        <LargeButton
-          twBgColor={$lightMode ? `blue-500` : `yellow-500`}
-          twTextColor={$lightMode ? `yellow-500` : `blue-500`}
+        <LargeButton lightMode={$lightMode}>Get in Touch</LargeButton>
+        <LargeButton lightMode={$lightMode} alternative
+          >View my Work</LargeButton
         >
-          Get in Touch
-        </LargeButton>
-        <LargeButton
-          twBgColor={$lightMode ? `yellow-500` : `blue-500`}
-          twTextColor={$lightMode ? `blue-500 ` : `yellow-500`}
-        >
-          View my Work
-        </LargeButton>
       </div>
     {/if}
   </div>

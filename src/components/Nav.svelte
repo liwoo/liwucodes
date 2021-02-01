@@ -152,7 +152,7 @@
         <li>
           <a
             aria-current={segment === "prjects" ? "page" : undefined}
-            href="project"
+            href="projects"
           >
             projects
           </a>
@@ -326,7 +326,7 @@
         <li>
           <a
             aria-current={segment === "prjects" ? "page" : undefined}
-            href="project"
+            href="projects"
           >
             projects
           </a>
@@ -611,7 +611,6 @@
   }
 
   div.mobile-socials {
-    border: 1px solid black;
     display: flex;
     width: 80%;
     flex-direction: column;

@@ -1,34 +1,390 @@
 <script context="module">
-	export function preload({ params, query }) {
-		return this.fetch(`blog.json`).then(r => r.json()).then(posts => {
-			return { posts };
-		});
-	}
+  export function preload({ params, query }) {
+    return this.fetch(`blog.json`)
+      .then((r) => r.json())
+      .then((posts) => {
+        return { posts };
+      });
+  }
 </script>
 
 <script>
-	export let posts;
+  import { onMount, afterUpdate } from "svelte";
+
+  import Thumbnail from "../../components/blog/Thumbnail.svelte";
+  import Container from "../../components/Container.svelte";
+  import Header from "../../components/Header.svelte";
+  import LargeButton from "../../components/LargeButton.svelte";
+  import Spacer from "../../components/Spacer.svelte";
+  import { lightMode } from "../../store";
+  import { fly, fade } from "svelte/transition";
+  export let posts;
+
+  let innerHeight;
+  let innerWidth;
+
+  let isBlinderClosed = true;
+  let startAnimation = false;
+
+  $: windowColor = $lightMode ? "#FDFFFF" : "#97B7BD";
+  $: windowFrameColor = $lightMode ? "#FFF" : "#BDDFE9";
+
+  function resetBackground() {
+    if ($lightMode === true) window.document.body.classList = "blog-light";
+    if ($lightMode === false) window.document.body.classList = "blog-dark";
+  }
+
+  onMount(() => {
+    resetBackground();
+
+    setTimeout(() => {
+      isBlinderClosed = false;
+    }, 500);
+
+    setTimeout(() => {
+      startAnimation = true;
+    }, 2000);
+  });
+
+  afterUpdate(() => {
+    resetBackground();
+  });
 </script>
 
-<style>
-	ul {
-		margin: 0 0 1em 0;
-		line-height: 1.5;
-	}
-</style>
-
 <svelte:head>
-	<title>Blog</title>
+  <title>Blog</title>
 </svelte:head>
+<svelte:window bind:innerHeight bind:innerWidth />
+<Header lightMode={$lightMode}>
+  <header
+    class="tw-w-full tw-pt-32 tw-pb-16 tw-flex tw-flex-col xl:tw-flex-row tw-items-stretch"
+  >
+    <svg
+      class="tw-w-full"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 720 437"
+    >
+      <g fill="none" fill-rule="evenodd">
+        <path fill="#B3D3DC" d="M57.65 436.08h605.89V51.655H57.65z" />
+        <path fill="#8FF2EF" d="M79.175 411.785h562.841V68.916H79.175z" />
+        <path fill="#A0F9F4" d="M79.175 411.785h562.841V193.566H79.175z" />
+        <path fill="#B0FFF9" d="M79.175 411.785h562.841V261.659H79.175z" />
+        <path
+          d="M438.284 189.596c-22.869 0-41.409-18.54-41.409-41.409s18.54-41.408 41.409-41.408 41.409 18.539 41.409 41.408-18.54 41.409-41.409 41.409m-.001-72.637c-17.221 0-31.198 13.947-31.227 31.175-.03 17.246 13.928 31.252 31.174 31.281h.055c17.221 0 31.198-13.946 31.227-31.174.03-17.247-13.928-31.252-31.174-31.282h-.055"
+          fill="#A5F5EC"
+        />
+        <path
+          d="M438.285 179.415h-.055c-17.246-.029-31.204-14.035-31.174-31.281.029-17.228 14.006-31.175 31.227-31.175h.055c17.246.03 31.204 14.035 31.174 31.282-.029 17.228-14.006 31.174-31.227 31.174"
+          fill="#C9F9E8"
+        />
+        <path
+          d="M458.27 148.187c0 11.038-8.948 19.986-19.986 19.986s-19.986-8.948-19.986-19.986 8.948-19.986 19.986-19.986 19.986 8.948 19.986 19.986"
+          fill="#FFFFE1"
+        />
+        <path
+          d="M441.743 174.931c2.526.02 7.307 1.122 13.52 2.97-2.86-4.436-4.509-9.396-4.509-14.659 0-18.569 19.967-33.622 44.598-33.622 24.63 0 44.597 15.053 44.597 33.622l-.002.03c6.469-2.352 11.817-3.751 15.289-3.751 22.809 0 41.299 13.609 41.299 30.396 0 16.788-18.49 30.397-41.299 30.397l-2.72.001c-.22.077-.458.148-.829.173-.95.062-109.438-.139-110.411-.147-16.179-.131-29.192-11.492-29.064-23.644.131-12.152 13.352-21.897 29.531-21.766M268.732 189.141c0 8.592 9.278 15.558 20.724 15.558 11.445 0 20.724-6.966 20.724-15.558 0-8.592-9.279-15.558-20.724-15.558-11.446 0-20.724 6.966-20.724 15.558M181.25 168.966c0 7.333 7.918 13.277 17.686 13.277s17.687-5.944 17.687-13.277c0-7.333-7.919-13.277-17.687-13.277s-17.686 5.944-17.686 13.277M142.871 150.746c0 4.805 5.188 8.699 11.588 8.699 6.4 0 11.588-3.894 11.588-8.699 0-4.804-5.188-8.699-11.588-8.699-6.4 0-11.588 3.895-11.588 8.699M329.733 115.254c8.215 0 15.361 3.695 19.075 9.147.99-.129 2.002-.21 3.04-.21 9.745 0 17.644 5.931 17.644 13.246s-7.899 13.245-17.644 13.245c-.117 0-.23-.011-.346-.013-3.495.035-21.104-.012-21.769-.012-12.035 0-21.792-7.925-21.792-17.701 0-9.777 9.757-17.702 21.792-17.702"
+          fill="#B0FFF9"
+        />
+        <path fill="#4CBBEC" d="M469.742 404.94h64.374v-78.23h-64.374z" />
+        <path
+          fill="#5BCDF4"
+          d="M486.341 342.39h10.289v-9.182h-10.289zM500.912 361.672h10.29v-9.182h-10.29zM500.912 380.954h10.29v-9.182h-10.29z"
+        />
+        <path fill="#5BA7DD" d="M423.292 401.599h59.22v-59.735h-59.22z" />
+        <path
+          fill="#67B5E5"
+          d="M441.962 357.216h8.199v-10.882h-8.199zM455.396 357.216h8.199v-10.882h-8.199zM441.962 374.773h8.199v-10.882h-8.199z"
+        />
+        <path fill="#81C7E2" d="M199.793 408.257h73.531V272.954h-73.531z" />
+        <path
+          fill="#8ED7ED"
+          d="M222.974 296.307h9.575v-16.906h-9.575zM240.488 296.307h9.575v-16.906h-9.575zM258.002 296.307h9.575v-16.906h-9.575zM205.46 323.358h9.575v-16.907h-9.575zM222.974 323.358h9.575v-16.907h-9.575zM258.002 323.358h9.575v-16.907h-9.575zM240.488 350.408h9.575v-16.906h-9.575zM240.488 377.459h9.575v-16.907h-9.575zM258.002 377.459h9.575v-16.907h-9.575zM222.974 404.509h9.575v-16.906h-9.575zM240.488 404.509h9.575v-16.906h-9.575zM258.002 404.509h9.575v-16.906h-9.575z"
+        />
+        <path fill="#4CBBEC" d="M128.127 404.683H230.94v-66.968H128.127z" />
+        <path
+          fill="#5BCDF4"
+          d="M193.193 353.843h12.448v-8.738h-12.448zM153.563 353.843h12.448v-8.738h-12.448zM133.748 353.843h12.448v-8.738h-12.448zM213.009 374.483h12.448v-8.739h-12.448zM193.193 374.483h12.448v-8.739h-12.448zM173.378 374.483h12.448v-8.739h-12.448zM213.009 395.122h12.448v-8.738h-12.448zM153.563 395.122h12.448v-8.738h-12.448zM133.748 395.122h12.448v-8.738h-12.448z"
+        />
+        <path fill="#81C7E2" d="M79.958 400.828h74.847v-163.49H79.958z" />
+        <path
+          fill="#8ED7ED"
+          d="M85.674 256.987h10.345v-12.625H85.674zM120.588 256.987h10.345v-12.625h-10.345zM85.674 279.024h10.345v-12.625H85.674zM103.131 279.024h10.345v-12.625h-10.345zM138.045 279.024h10.345v-12.625h-10.345zM85.674 301.06h10.345v-12.625H85.674zM120.588 301.06h10.345v-12.625h-10.345zM138.045 301.06h10.345v-12.625h-10.345zM103.131 323.097h10.345v-12.625h-10.345zM120.588 323.097h10.345v-12.625h-10.345zM138.045 323.097h10.345v-12.625h-10.345zM103.131 345.133h10.345v-12.625h-10.345zM85.653 367.078h10.345v-12.625H85.653z"
+        />
+        <path fill="#5BA7DD" d="M300.96 400.828h59.22V290.593h-59.22z" />
+        <path
+          fill="#67B5E5"
+          d="M324.125 306.231h12.89v-9.256h-12.89zM342.766 306.231h12.89v-9.256h-12.89zM305.484 323.524h12.89v-9.255h-12.89zM324.125 323.524h12.89v-9.255h-12.89zM342.766 323.524h12.89v-9.255h-12.89zM305.484 340.817h12.89v-9.255h-12.89zM324.125 358.11h12.89v-9.255h-12.89zM305.484 375.403h12.89v-9.255h-12.89zM324.125 375.403h12.89v-9.255h-12.89z"
+        />
+        <path fill="#4CBBEC" d="M344.553 400.828h83.484v-69.835h-83.484z" />
+        <path
+          fill="#5BCDF4"
+          d="M351.133 352.165h9.557v-13.459h-9.557zM369.521 352.165h9.557v-13.459h-9.557zM369.521 372.354h9.557v-13.459h-9.557zM387.91 372.354h9.557v-13.459h-9.557zM351.133 392.543h9.557v-13.46h-9.557zM387.91 392.543h9.557v-13.46h-9.557z"
+        />
+        <path fill="#81C7E2" d="M393.532 411.581h48.527V252.682h-48.527z" />
+        <path
+          fill="#8ED7ED"
+          d="M398.837 274.139h8.207v-14.57h-8.207zM413.65 274.139h8.208v-14.57h-8.208zM398.837 298.423h8.207v-14.57h-8.207zM428.464 298.423h8.208v-14.57h-8.208zM413.65 322.707h8.208v-14.57h-8.208zM428.464 322.707h8.208v-14.57h-8.208zM398.837 346.991h8.207v-14.57h-8.207zM428.464 346.991h8.208v-14.57h-8.208zM398.837 371.275h8.207v-14.57h-8.207zM413.65 371.275h8.208v-14.57h-8.208z"
+        />
+        <path fill="#5BA7DD" d="M555.484 400.828h78.549V244.684h-78.549z" />
+        <path
+          fill="#67B5E5"
+          d="M562.125 266.208h12.906V252.15h-12.906zM579.6 266.208h12.906V252.15H579.6zM614.464 266.208h12.906V252.15h-12.906zM579.6 286.56h12.906v-14.058H579.6zM597.018 286.56h12.906v-14.058h-12.906zM562.125 306.911h12.906v-14.058h-12.906zM597.018 306.911h12.906v-14.058h-12.906zM579.6 306.911h12.906v-14.058H579.6zM579.6 327.262h12.906v-14.058H579.6zM562.125 347.614h12.906v-14.059h-12.906zM597.018 347.614h12.906v-14.059h-12.906zM562.125 367.965h12.906v-14.058h-12.906zM579.6 367.965h12.906v-14.058H579.6zM597.018 388.316h12.906v-14.058h-12.906z"
+        />
+        <path fill="#5BA7DD" d="M122.024 407.768h55.653v-95.544h-55.653z" />
+        <path
+          fill="#67B5E5"
+          d="M157.75 332.641h9.453v-13.004h-9.453zM142.6 332.641h9.452v-13.004H142.6zM157.75 354.477h9.453v-13.005h-9.453zM127.449 354.477h9.452v-13.005h-9.452zM157.75 376.312h9.453v-13.004h-9.453zM142.6 376.312h9.452v-13.004H142.6zM142.6 398.148h9.452v-13.005H142.6zM127.449 398.148h9.452v-13.005h-9.452z"
+        />
+        <path fill="#4CBBEC" d="M263.36 415.545h47.256V321.27H263.36z" />
+        <path
+          fill="#5BCDF4"
+          d="M295.713 343.588h7.954v-12.832h-7.954zM282.964 343.588h7.954v-12.832h-7.954zM295.713 365.133h7.954v-12.832h-7.954zM270.215 365.133h7.954v-12.832h-7.954zM295.713 386.679h7.954v-12.832h-7.954zM282.964 386.679h7.954v-12.832h-7.954zM282.964 408.224h7.954v-12.832h-7.954zM270.215 408.224h7.954v-12.832h-7.954z"
+        />
+        <path fill="#81C7E2" d="M528.536 419.913h62.568V311.671h-62.568z" />
+        <path
+          fill="#8ED7ED"
+          d="M536.268 333.47h10.986v-12.985h-10.986zM536.268 355.299h10.986v-12.985h-10.986zM554.92 355.299h10.986v-12.985H554.92zM536.268 377.118h10.986v-12.985h-10.986zM554.92 377.118h10.986v-12.985H554.92zM534.837 398.986h10.986v-12.985h-10.986zM554.92 420.796h10.986v-12.985H554.92zM573.073 333.47h10.986v-12.985h-10.986zM573.073 355.299h10.986v-12.985h-10.986zM571.642 398.986h10.986v-12.985h-10.986z"
+        />
+        <path
+          fill={windowFrameColor}
+          d="M468.463 399.301h22.978V60.7h-22.978zM229.75 399.301h22.978V60.7H229.75z"
+        />
+        <path
+          fill={windowFrameColor}
+          d="M625.87 60.7v334.716H95.321V60.7H65.858v363.102h589.475V60.7H625.87"
+        />
+        <path
+          d="M517.245 373.799c-.485-2.395-1.114-4.747-1.963-6.978a41.378 41.378 0 00-4.447-8.507c-.802-1.181-5.782-5.728-5.648-6.764.107-.831 1.257-1.338 2.246-1.231.988.108 1.824.648 2.584 1.189 6.216 4.427 9.636 11.116 10.969 17.708.362.208.761-.222.895-.572 2.324-6.089 1.322-13.206-.001-19.359-1.644-7.647-2.508-15.415-7.491-22.247-.543-.745-1.135-1.706-.542-2.424.479-.581 1.545-.623 2.275-.271s1.194.985 1.594 1.607c2.336 3.634 3.592 8.41 4.836 12.426-.894-7.109 1.316-15.16 4.446-21.727.373-.785.822-1.613 1.687-2.046.865-.432 2.25-.201 2.493.62-2.735 5.294-4.916 11.289-5.901 16.988-1.26 7.285 1.006 13.584 1.667 20.764-.156-1.699 1.582-5.06 2.067-6.851.701-2.58 2.458-4.777 4.83-6.549.617-.46 1.317-.902 2.137-.982.819-.081 1.76.34 1.866 1.027.112.725-.671 1.299-1.336 1.771-5.708 4.046-7.788 10.683-8.191 16.945-.517 8.036.685 15.884-1.797 23.772-.202.644-.426 1.3-.891 1.839-1.452 1.685-4.441 1.542-6.889 1.222-.329-3.692-.731-7.585-1.495-11.37"
+          fill="#629E04"
+        />
+        <path
+          d="M507.12 332.306c6.443 3.799 6.486 11.885 2.136 19.264-4.351 7.378-11.448 11.254-17.891 7.455-6.443-3.8-5.441-21.213-5.441-21.213s14.753-9.305 21.196-5.506"
+          fill="#AFCC05"
+        />
+        <path
+          d="M509.256 351.57c-4.351 7.378-11.448 11.254-17.891 7.455-6.443-3.8-5.441-21.213-5.441-21.213s23.448 13.739 23.332 13.758"
+          fill="#629E04"
+        />
+        <path
+          d="M533.58 325.163c-4.629 4.156-3.335 10.756 1.424 16.057 4.76 5.3 11.183 7.294 15.812 3.137 4.629-4.156.95-18.189.95-18.189s-13.558-5.162-18.186-1.005"
+          fill="#AFCC05"
+        />
+        <path
+          d="M535.004 341.22c4.76 5.3 11.183 7.294 15.812 3.137 4.629-4.156.95-18.189.95-18.189s-16.859 15.055-16.762 15.052"
+          fill="#629E04"
+        />
+        <path
+          d="M520.718 312.738c2.849 4.448.299 9.557-4.794 12.82-5.093 3.262-10.8 3.442-13.649-1.005-2.849-4.448 3.332-15.101 3.332-15.101s12.262-1.161 15.111 3.286"
+          fill="#AFCC05"
+        />
+        <path
+          d="M515.924 325.558c-5.093 3.262-10.8 3.442-13.649-1.005-2.849-4.448 3.332-15.101 3.332-15.101l10.317 16.106"
+          fill="#629E04"
+        />
+        <path
+          d="M524.54 305.896c-2.303 3.762-.086 7.985 4.223 10.622 4.309 2.638 9.078 2.69 11.381-1.072 2.303-3.763-3.041-12.554-3.041-12.554s-10.26-.759-12.563 3.004"
+          fill="#AFCC05"
+        />
+        <path
+          d="M528.763 316.518c4.309 2.638 9.078 2.69 11.381-1.072 2.303-3.763-3.041-12.554-3.041-12.554l-8.34 13.626"
+          fill="#629E04"
+        />
+        <path
+          d="M501.017 372.98s.76 16.833 11.091 36.053h22.859c10.331-19.22 11.092-36.053 11.092-36.053h-45.042"
+          fill="#B3D3DC"
+        />
+        <path
+          d="M534.299 372.98h-33.282s.609 13.345 8.031 29.835l.19.057c11.958 4.73 21.936-8.582 25.061-29.892"
+          fill={windowFrameColor}
+        />
+        <path fill={windowColor} d="M77.559 80.865h566.026V57.564H77.559z" />
+        <path
+          fill={windowColor}
+          d="M2.18 94.491h715.64V79.204H2.18zM2 106h716V96H2z"
+        />
+        <path
+          fill="#B3D3DC"
+          d="M2.361 105.169V106H719V95H1v11h1.361v-.831h1.36v-8.506h712.556v7.674H2.361v.832h1.36-1.36"
+        />
+        <path fill="#B3D3DC" d="M136 106h3V95h-3zM584 106h3V95h-3z" />
+        {#if isBlinderClosed}
+          {#each [...Array(25).keys()] as i}
+            <g out:fly={{ duration: 500, y: -10, delay: 50 * (25 - i) }}>
+              <path fill={windowColor} d="M2 {i * 11 + 117}h716v-10H2z" />
+              <path
+                fill="#B3D3DC"
+                d="M2.361 {i * 11 + 118}.169V{i * 11 +
+                  117}H719v-11H1v11h1.361v-.831h1.36v-8.506h712.556v7.674H2.361v.832h1.36-1.36"
+              />
+              <path
+                fill="#B3D3DC"
+                d="M136 {i * 11 + 117}h3v-11h-3zM584 {i * 11 + 117}h3v-11h-3z"
+              />
+            </g>
+          {/each}
+        {/if}
+        <path
+          fill="#B3D3DC"
+          d="M2.18 94.491v1.361h717.002V77.843H.818v18.009H2.18v-1.361h1.361V80.566h712.917v12.563H2.18v1.362h1.361H2.18"
+        />
+        <path fill={windowColor} d="M2.18 83.373h715.64V68.087H2.18z" />
+        <path
+          fill="#B3D3DC"
+          d="M2.18 83.373v1.362h717.002v-18.01H.818v18.01H2.18v-1.362h1.361V69.449h712.917v12.563H2.18v1.361h1.361H2.18"
+        />
+        <path fill={windowColor} d="M2.18 72.256h715.64V56.97H2.18z" />
+        <path
+          fill="#B3D3DC"
+          d="M2.18 72.256v1.362h717.002v-18.01H.818v18.01H2.18v-1.362h1.361V58.332h712.917v12.562H2.18v1.362h1.361H2.18"
+        />
+        <path fill={windowColor} d="M2.18 61.139h715.64V45.853H2.18z" />
+        <path
+          fill="#B3D3DC"
+          d="M2.18 61.139v1.362h717.002v-18.01H.818v18.01H2.18v-1.362h1.361V47.214h712.917v12.563H2.18v1.362h1.361H2.18"
+        />
+        <path fill={windowColor} d="M2.18 50.022h715.64V34.735H2.18z" />
+        <path
+          fill="#B3D3DC"
+          d="M2.18 50.022v1.361h717.002V33.374H.818v18.009H2.18v-1.361h1.361V36.097h712.917V48.66H2.18v1.362h1.361H2.18"
+        />
+        <path fill={windowColor} d="M2.18 38.904h715.64V23.618H2.18z" />
+        <path
+          fill="#B3D3DC"
+          d="M2.18 38.904v1.362h717.002v-18.01H.818v18.01H2.18v-1.362h1.361V24.98h712.917v12.563H2.18v1.361h1.361H2.18"
+        />
+        <path fill={windowColor} d="M2.18 27.225h715.64V2.212H2.18z" />
+        <path
+          fill="#B3D3DC"
+          d="M2.18 27.225v1.362h717.002V.85H.818v27.737H2.18v-1.362h1.361V3.573h712.917v22.291H2.18v1.361h1.361H2.18"
+        />
+        <path fill={windowFrameColor} d="M683.14 339.207h6.08V22.655h-6.08z" />
+        <path
+          fill="#B3D3DC"
+          d="M683.14 339.207v1.164h7.244V21.491h-8.407v318.88h1.163v-1.164h1.164V23.818h3.753v314.225l-4.917.001v1.163h1.164-1.164"
+        />
+        <path
+          d="M692.348 342.719a6.168 6.168 0 11-12.336 0v-12.698a6.168 6.168 0 1112.336 0v12.698"
+          fill={windowFrameColor}
+        />
+        <path
+          d="M692.348 342.719h-.943a5.205 5.205 0 01-1.531 3.694 5.2 5.2 0 01-3.694 1.53 5.201 5.201 0 01-3.694-1.53 5.2 5.2 0 01-1.53-3.694v-12.698c0-1.446.583-2.746 1.53-3.695a5.21 5.21 0 013.694-1.53 5.208 5.208 0 013.694 1.53 5.209 5.209 0 011.531 3.695v12.698h1.887v-12.698a7.112 7.112 0 10-14.223 0v12.698a7.112 7.112 0 1014.223 0h-.944M2.18 26.576h715.64v-5.558H2.18z"
+          fill="#B3D3DC"
+        />
+        <path
+          fill="#B3D3DC"
+          d="M2.18 26.576v1.362h717.002v-8.282H.818v8.282H2.18v-1.362h1.361V22.38h712.917v2.835H2.18v1.361h1.361H2.18"
+        />
+        <path
+          fill="#B3D3DC"
+          d="M136.116 94.917h2.575V23.581h-2.575zM584.466 94.917h2.575V23.581h-2.575z"
+        />
+      </g>
+    </svg>
+    <!-- content here -->
+    <div
+      class="tw-w-full xl:tw-w-4/5 xl:tw-pl-8 tw-mt-4 tw-flex tw-text-center xl:tw-text-left tw-flex-col tw-justify-start"
+    >
+      {#if startAnimation}
+        <h2
+          in:fly={{ y: -30 }}
+          class="{$lightMode
+            ? `tw-text-black`
+            : `tw-text-yellow-500`} tw-text-xl sm:tw-text-3xl md:tw-text-4xl xl:tw-text-5xl ul:tw-text-6xl tw-font-extrabold"
+        >
+          My thoughts on Tech, Code and Life!
+        </h2>
+        <h3
+          in:fly={{ y: -30 }}
+          class="tw-text-sm tw-font-normal tw-mb-8 tw-text-gray-600"
+        >
+          Signup to my mailing list and get notified as soon as I have something
+          new to say
+        </h3>
+        <input
+          in:fly={{ y: -30 }}
+          class="tw-bg-gray-{$lightMode
+            ? `100`
+            : `900`} tw-rounded-full tw-text-gray-{$lightMode
+            ? `900`
+            : `100`}  tw-border-black tw-border tw-text-lg tw-p-4 md:tw-w-2/3 md:tw-m-auto xl:tw-m-0"
+          type="text"
+          placeholder="Enter your Email Address here"
+        />
+        <div in:fly={{ y: 20, delay: 500 }} class="tw-w-18">
+          <LargeButton lightMode={$lightMode}
+            >Signup to Mailing List</LargeButton
+          >
+        </div>
+      {/if}
+    </div>
+  </header>
+</Header>
+<Container>
+  {#if startAnimation}
+    <div
+      in:fade={{ delay: 1000 }}
+      class="tw-bg-gray-200 tw-w-full tw-my-8 tw-flex tw-sticky top-0"
+    >
+      <ul
+        class="tw-list-none tw-inline-flex tw-w-3/4 tw-justify-around tw-text-gray-600  tw-border-gray-600 tw-border-solid tw-border-l-0 tw-border-t-0 tw-border-b-0 tw-border-r"
+      >
+        <li class="tw-text-gray-800 tw-font-bold">Opinions</li>
+        <li>Technical</li>
+        <li>Videos</li>
+        <li>Life</li>
+      </ul>
+      <!-- secondary nav -->
+      <div class="tw-flex tw-w-full tw-align-middle tw-pl-4">
+        <svg
+          class="tw-w-6 tw-h-auto"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 25 26"
+        >
+          <g stroke="#979797" fill="none" fill-rule="evenodd">
+            <circle stroke-width="3" cx="8.5" cy="8.5" r="7" />
+            <path
+              stroke-width="4"
+              stroke-linecap="round"
+              d="M14.321 15.321l8.358 8.358"
+            />
+          </g>
+        </svg>
+        <input
+          class="tw-w-full tw-text-lg tw-bg-transparent tw-border-none tw-py-2 tw-px-4"
+          type="text"
+          placeholder=""
+        />
+      </div>
+    </div>
+  {/if}
+  {#if startAnimation}
+    <div
+      in:fly={{ y: 50, delay: 2000 }}
+      class="tw-grid-cols-1 xl:tw-grid-cols-2 tw-grid tw-gap-4"
+    >
+      {#each posts as post}
+        <Thumbnail
+          lightMode={$lightMode}
+          title={post.title}
+          slug={post.slug}
+          image="https://res.cloudinary.com/tiyeni/image/upload/v1606097900/faith_mussa.jpg"
+          imageAlt="Faith Mussa"
+          category="Opinion"
+          excerpt="With so many languages and frameworks to master as a Software Developer, it can be overwhelming to choose where to start from."
+        />
+      {/each}
+    </div>
+  {/if}
+  <Spacer />
+</Container>
 
-<h1>Recent posts</h1>
-
-<ul>
-	{#each posts as post}
-		<!-- we're using the non-standard `rel=prefetch` attribute to
-				tell Sapper to load the data for the page as soon as
-				the user hovers over the link or taps it, instead of
-				waiting for the 'click' event -->
-		<li><a rel='prefetch' href='blog/{post.slug}'>{post.title}</a></li>
-	{/each}
-</ul>
+<style>
+  :global(body.blog-dark) {
+    transition: all 0.3s;
+    background: #292941;
+  }
+  :global(body.blog-light) {
+    transition: all 0.3s;
+    background: #c6e7ef;
+  }
+</style>
