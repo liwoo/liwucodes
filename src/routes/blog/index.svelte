@@ -33,7 +33,7 @@
 
   $: outsideBgLightColor = $lightMode ? "#B0FFF9" : "#5365E5";
   $: outsideBgMediumColor = $lightMode ? "#A0F9F4" : "#4755C3";
-  $: outsideBgDarkColor = $lightMode ? "#A0F9F4" : "#3B44A0";
+  $: outsideBgDarkColor = $lightMode ? "#A0F9F4" : "#3b44a09e";
   $: outsideBgColor = $lightMode ? "#8FF2EF" : "#22225B";
 
   $: buildingLightColor = $lightMode ? "#81C7E2" : "#2F2F72";
@@ -101,6 +101,45 @@
         d="M79.175 406.88h562.841V64.009H79.175V406.88z"
         clip-rule="evenodd"
       />
+      <!-- start moon -->
+      {#if !$lightMode}
+        <g class="moon">
+          <circle cx="306.975" cy="180.977" r="23.975" fill="#4e3a5e70" />
+          <circle
+            cx="306.975"
+            cy="180.977"
+            r="23.975"
+            fill="#714D61"
+            stroke="#4E3A5E"
+            stroke-width="8"
+          >
+            <animate
+              attributeName="opacity"
+              from="1"
+              to="0"
+              dur="3s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="r"
+              attributeType="XML"
+              from="15.7"
+              to="23.975"
+              begin="0s"
+              dur="3s"
+              fill="remove"
+              repeatCount="indefinite"
+            />
+          </circle>
+          <path
+            fill="#FFDB56"
+            fill-rule="evenodd"
+            d="M306.851 180.954a25.518 25.518 0 00-4.98-15.181 15.708 15.708 0 0113.587 2.744 15.704 15.704 0 016.118 12.437 15.694 15.694 0 01-12.593 15.389 15.694 15.694 0 01-7.112-.209 25.513 25.513 0 004.98-15.18"
+            clip-rule="evenodd"
+          />
+        </g>
+      {/if}
+      <!-- end moon -->
       <path
         fill={outsideBgDarkColor}
         fill-rule="evenodd"
@@ -122,19 +161,35 @@
       <!-- end outside background -->
 
       {#if $lightMode}
+        <!-- sun -->
         <g fill-rule="evenodd" clip-rule="evenodd">
-          <path
-            fill="#A5F5EC"
-            d="M438.284 189.6a41.412 41.412 0 01-38.257-25.562 41.409 41.409 0 1138.257 25.562zm0-72.637a31.225 31.225 0 00-31.254 31.202 31.226 31.226 0 0031.201 31.254h.055a31.225 31.225 0 0031.254-31.201 31.226 31.226 0 00-31.201-31.255h-.055"
-          />
-          <path
-            fill="#C9F9E8"
-            d="M438.285 179.415h-.055a31.226 31.226 0 01-22.036-53.328 31.225 31.225 0 0122.089-9.128h.055a31.231 31.231 0 0131.202 31.255 31.228 31.228 0 01-31.255 31.201"
-          />
-          <path
-            fill="#FFFFE1"
-            d="M458.27 148.187a19.983 19.983 0 01-12.338 18.464 19.985 19.985 0 01-18.752-35.083 19.988 19.988 0 0131.09 16.618"
-          />
+          <circle
+            cx="438.28"
+            cy="148.19"
+            r="36.41"
+            fill="#FFE160"
+            stroke="#FBEC5D"
+            stroke-width="10"
+          >
+            <animate
+              attributeName="opacity"
+              from="1"
+              to="0"
+              dur="3s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="r"
+              attributeType="XML"
+              from="19"
+              to="36.41"
+              begin="0s"
+              dur="3s"
+              fill="remove"
+              repeatCount="indefinite"
+            />
+          </circle>
+          <circle cx="438" cy="148" r="20" fill="#FFE160" />
         </g>
         <!-- start clouds-l -->
         <g fill="#B0FFF9" fill-rule="evenodd" clip-rule="evenodd">
@@ -169,27 +224,8 @@
             fill={buildingLight4Color}
             d="M420.751 141.747l-2.748-1.708-2.964 1.295.776-3.141-2.148-2.419 3.227-.233 1.637-2.79 1.218 3 3.16.7-2.474 2.085.316 3.219v-.008zm175.875 30.908l-4.579-2.763-4.872 2.206 1.213-5.208-3.6-3.952 5.328-.456 2.644-4.648 2.081 4.926 5.238 1.079-4.043 3.5.593 5.315"
           />
-          <path
-            fill="#4E3A5E"
-            d="M332.888 191.828h-7.58a21.096 21.096 0 00-.33-20.905 21.11 21.11 0 00-7.707-7.587 21.106 21.106 0 00-20.908 0 21.11 21.11 0 00-7.707 7.587 21.096 21.096 0 00-.33 20.905h-7.579a27.977 27.977 0 0113.016-34.888 27.976 27.976 0 0139.125 34.888"
-          />
-          <path
-            fill="#625596"
-            d="M306.817 209.637a27.98 27.98 0 01-26.07-17.809h7.579a21.104 21.104 0 0036.982 0h7.58a27.986 27.986 0 01-26.071 17.809"
-          />
-          <path
-            fill="#714D61"
-            d="M325.308 191.828h-36.982a21.096 21.096 0 01.33-20.905 21.11 21.11 0 017.707-7.587 21.106 21.106 0 0120.908 0 21.11 21.11 0 017.707 7.587 21.096 21.096 0 01.33 20.905z"
-          />
-          <path
-            fill="#81638E"
-            d="M306.817 202.759a21.095 21.095 0 01-18.491-10.931h36.982a21.092 21.092 0 01-18.491 10.931z"
-          />
-          <path
-            fill={buildingLight1Color}
-            d="M306.691 181.662a25.518 25.518 0 00-4.98-15.181 15.698 15.698 0 0119.705 15.181 15.694 15.694 0 01-12.592 15.389 15.698 15.698 0 01-7.113-.209 25.513 25.513 0 004.98-15.18"
-          />
         </g>
+
         <!-- start clouds-l -->
         <g fill="#3B44A0" fill-rule="evenodd" clip-rule="evenodd">
           <path
