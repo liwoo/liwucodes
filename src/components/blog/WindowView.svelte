@@ -36,13 +36,7 @@
   });
 </script>
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="720"
-  height="432"
-  fill="none"
-  class="tw-w-full"
->
+<svg class="tw-w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 437">
   <!-- start outside background -->
   <path
     fill={windowFrameLinesColor}
