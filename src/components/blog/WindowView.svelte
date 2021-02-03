@@ -90,23 +90,27 @@
         fill-rule="evenodd"
         d="M306.851 180.954a25.518 25.518 0 00-4.98-15.181 15.708 15.708 0 0113.587 2.744 15.704 15.704 0 016.118 12.437 15.694 15.694 0 01-12.593 15.389 15.694 15.694 0 01-7.112-.209 25.513 25.513 0 004.98-15.18"
         clip-rule="evenodd"
+        class="moon"
       />
     </g>
   {/if}
   <!-- end moon -->
   <path
+    class="jamming"
     fill={outsideBgDarkColor}
     fill-rule="evenodd"
     d="M79.175 418h562.841V191.438H79.175V418z"
     clip-rule="evenodd"
   />
   <path
+    class="jamming"
     fill={outsideBgMediumColor}
     fill-rule="evenodd"
     d="M79.175 406.88h562.841V221.084H79.175V406.88z"
     clip-rule="evenodd"
   />
   <path
+    class="jamming"
     fill={outsideBgLightColor}
     fill-rule="evenodd"
     d="M79.175 406.88h562.841V277.133H79.175V406.88z"
@@ -116,7 +120,7 @@
 
   {#if lightMode}
     <!-- sun -->
-    <g fill-rule="evenodd" clip-rule="evenodd">
+    <g fill-rule="evenodd" clip-rule="evenodd" class="sun">
       <circle
         cx="438.28"
         cy="148.19"
@@ -848,5 +852,24 @@
     animation-duration: 70s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+  }
+  @keyframes moon {
+    50% {
+      transform: translatey(-5%);
+    }
+  }
+  @keyframes jam {
+    50% {
+      transform: translatey(-2%);
+    }
+  }
+  svg .moon,
+  svg .sun {
+    animation: moon 2000ms 500ms ease-in-out infinite;
+    transform-box: fill-box;
+  }
+  svg .jamming {
+    animation: jam 2000ms 500ms ease-in-out infinite;
+    transform-box: fill-box;
   }
 </style>
